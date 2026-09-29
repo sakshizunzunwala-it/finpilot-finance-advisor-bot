@@ -20,8 +20,8 @@ https://finpilot-money-planner.ai.studio
 ## Screenshots
 
 ### Dashboard
-![Dashboard](<img width="954" height="442" alt="Screenshot 2026-09-29 190808" src="https://github.com/user-attachments/assets/da6ac755-f9a4-4a59-83e0-01d0954ef4d4" />
-)
+![Dashboard] <img width="954" height="442" alt="Screenshot 2026-09-29 190808" src="https://github.com/user-attachments/assets/da6ac755-f9a4-4a59-83e0-01d0954ef4d4" />
+
 
 ### AI Budget Plan
 ![Budget] <img width="952" height="449" alt="Screenshot 2026-09-29 190826" src="https://github.com/user-attachments/assets/4865735f-2b20-48d7-830d-e840d8807527" />
