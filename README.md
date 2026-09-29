@@ -14,8 +14,7 @@ https://finpilot-money-planner.ai.studio
 - AI chat advisor that uses your real data
 - Financial health score and "Safe to Spend Today" card
 - Profiles for Salaried Professional, College Student, Freelancer and Household Manager
-- Dark and light mode
-- Load demo data button
+
 
 ## Screenshots
 
@@ -50,13 +49,6 @@ https://finpilot-money-planner.ai.studio
 6. Start the app:
    python app.py
 7. Open http://localhost:5000 in your browser
-
-## Project Structure
-- app.py – Flask server and API routes
-- models.py – database models
-- ai_engine.py – Gemini AI prompts and logic
-- seed_data.py – demo data
-- templates/ and static/ – frontend files
 
 ## License
 Apache-2.0
