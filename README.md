@@ -34,7 +34,8 @@ https://finpilot-money-planner.ai.studio
 - Backend: Python, Flask, SQLAlchemy, SQLite
 - AI: Google Gemini API
 - Frontend: HTML, CSS, JavaScript, Chart.js
- ## Documentation
+- 
+## Documentation
 📄 [Click here to view the full project documentation](FinPilot_Documentation.docx)
 
 ## How to Run Locally
