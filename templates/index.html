@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinPilot – Personal Finance Advisor Bot</title>
+  <meta name="description" content="AI-powered personal finance assistant with smart budgeting, expense tracking, savings insights, financial health score, and scenario-aware AI advisor.">
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#0b101b',
+              surface: '#111827',
+              card: '#1e293b',
+              accent: '#8b5cf6',
+              emerald: '#10b981',
+              coral: '#f43f5e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-[#0b101b] text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+  <!-- Main Container -->
+  <div class="flex-1 flex overflow-hidden">
+    <!-- Desktop Sidebar -->
+    <aside class="w-64 border-r border-slate-800/80 bg-slate-950/60 backdrop-blur-xl p-5 hidden md:flex flex-col justify-between shrink-0">
+      <div>
+        <div class="flex items-center gap-3 mb-8 px-2">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center font-bold text-white shadow-lg shadow-violet-500/25">
+            FP
+          </div>
+          <div>
+            <h1 class="font-bold text-base tracking-tight text-white">FinPilot</h1>
+            <p class="text-xs text-slate-400">AI Finance Advisor</p>
+          </div>
+        </div>
+
+        <nav class="space-y-1.5" id="sidebar-nav">
+          <button data-tab="dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all active-nav bg-violet-600/15 text-violet-300 border border-violet-500/20">
+            <span>📊</span> Dashboard
+          </button>
+          <button data-tab="income" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+            <span>💰</span> Income
+          </button>
+          <button data-tab="expenses" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+            <span>💳</span> Expenses
+          </button>
+          <button data-tab="budget" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+            <span>🎯</span> AI Budget Plan
+          </button>
+          <button data-tab="goals" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+            <span>🏆</span> Goals
+          </button>
+          <button data-tab="report" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+            <span>📄</span> Reports
+          </button>
+          <button data-tab="advisor" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+            <span>🤖</span> AI Advisor
+          </button>
+        </nav>
+      </div>
+
+      <!-- User Profile Badge & Quick Demo Seeder -->
+      <div class="border-t border-slate-800/80 pt-4 space-y-3">
+        <button id="btn-open-profile" class="w-full text-left p-3 rounded-xl bg-slate-900/60 hover:bg-slate-800/60 border border-slate-800 transition-all flex items-center justify-between group">
+          <div class="truncate">
+            <p id="user-display-name" class="text-sm font-semibold text-slate-200 truncate">Alex Morgan</p>
+            <p id="user-display-profile" class="text-xs text-violet-400 truncate">Salaried Professional</p>
+          </div>
+          <span class="text-slate-500 group-hover:text-slate-300">⚙️</span>
+        </button>
+
+        <button id="btn-load-demo" class="w-full py-2 px-3 text-xs font-medium rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all flex items-center justify-center gap-2">
+          <span>✨</span> Load Demo Data
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Viewport -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+      <!-- Top Bar -->
+      <header class="h-16 border-b border-slate-800/80 bg-slate-950/40 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-3">
+          <span class="text-xl md:hidden font-bold text-violet-400">FinPilot</span>
+          <span id="current-view-title" class="text-base font-semibold text-slate-200">Financial Dashboard</span>
+          <span id="persona-badge" class="hidden sm:inline-block px-2.5 py-0.5 text-xs rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30">
+            Salaried Professional
+          </span>
+        </div>
+        
+        <div class="flex items-center gap-3">
+          <button id="theme-toggle" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition-all" title="Toggle Theme">
+            🌓
+          </button>
+          <button id="quick-add-expense-btn" class="px-3.5 py-2 text-xs font-semibold rounded-lg bg-violet-600 hover:bg-violet-500 text-white shadow-md shadow-violet-600/30 transition-all flex items-center gap-1.5">
+            <span>+</span> Log Expense
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area with Active Tab Views -->
+      <div class="p-6 max-w-7xl w-full mx-auto space-y-6" id="view-container">
+        <!-- Rendered dynamically by static/js/app.js -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating AI Advisor Chat Widget -->
+  <div id="floating-chat-container" class="fixed bottom-6 right-6 z-50">
+    <div id="chat-popup" class="hidden mb-3 w-96 max-w-[90vw] h-[520px] rounded-2xl bg-slate-900/95 border border-slate-700/60 shadow-2xl backdrop-blur-2xl flex flex-col overflow-hidden transition-all duration-300">
+      <!-- Chat Header -->
+      <div class="p-4 bg-gradient-to-r from-violet-900/80 to-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center text-sm shadow">🤖</div>
+          <div>
+            <h3 class="text-sm font-bold text-white">FinPilot AI Advisor</h3>
+            <p class="text-[11px] text-violet-300">Context-Aware Financial Assistant</p>
+          </div>
+        </div>
+        <button id="close-chat-btn" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+      </div>
+
+      <!-- Chat Messages Body -->
+      <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm">
+        <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700/50 text-slate-200">
+          👋 Hi! I am FinPilot. I have live access to your budget, income, and goals. Ask me things like:
+          <div class="mt-2 space-y-1.5">
+            <button class="chat-preset-query text-xs block text-left text-violet-400 hover:underline">
+              • "Can I afford a ₹40,000 phone this month?"
+            </button>
+            <button class="chat-preset-query text-xs block text-left text-violet-400 hover:underline">
+              • "Where am I overspending the most?"
+            </button>
+            <button class="chat-preset-query text-xs block text-left text-violet-400 hover:underline">
+              • "How should I allocate my savings for my emergency fund?"
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <form id="chat-form" class="p-3 border-t border-slate-800 bg-slate-950/70 flex gap-2">
+        <input type="text" id="chat-input" placeholder="Ask financial question..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-500">
+        <button type="submit" class="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-semibold shadow">Send</button>
+      </form>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="toggle-chat-btn" class="w-14 h-14 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 text-white shadow-xl shadow-violet-600/40 flex items-center justify-center text-2xl hover:scale-105 transition-all">
+      💬
+    </button>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- Profile & Onboarding Modal -->
+  <div id="profile-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white">Financial Profile & Settings</h3>
+        <button id="close-profile-modal" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <form id="profile-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Your Name</label>
+          <input type="text" id="prof-name" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Persona Profile Type</label>
+          <select id="prof-type" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+            <option value="Salaried Professional">Salaried Professional (50/30/20 Wealth Builder)</option>
+            <option value="College Student">College Student (Allowance tracking & study budget)</option>
+            <option value="Freelancer">Freelancer (Variable income, clients & emergency runway)</option>
+            <option value="Household Manager">Household Manager (Groceries, utilities & family fund)</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Monthly Income</label>
+            <input type="number" id="prof-income" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Currency Symbol</label>
+            <input type="text" id="prof-currency" value="₹" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" id="cancel-profile-btn" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-violet-600 hover:bg-violet-500 text-white">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Expense Modal -->
+  <div id="expense-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="expense-modal-title" class="text-base font-bold text-white">Log Expense</h3>
+        <button id="close-expense-modal" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <form id="expense-form" class="space-y-3.5">
+        <input type="hidden" id="exp-id">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Amount</label>
+          <input type="number" id="exp-amount" required step="any" placeholder="e.g. 1500" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Category</label>
+          <select id="exp-category" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+            <option value="Food">🍔 Food & Dining</option>
+            <option value="Groceries">🛒 Groceries & Pantry</option>
+            <option value="Rent">🏠 Rent & Housing</option>
+            <option value="Transport">🚗 Transport & Commute</option>
+            <option value="Utilities">💡 Utilities & Bills</option>
+            <option value="Entertainment">🎬 Entertainment</option>
+            <option value="Shopping">🛍️ Shopping</option>
+            <option value="Education">📚 Education</option>
+            <option value="Healthcare">💊 Healthcare</option>
+            <option value="Other">📦 Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Note / Description</label>
+          <input type="text" id="exp-note" placeholder="e.g. Swiggy order with friends" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Date</label>
+          <input type="date" id="exp-date" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none">
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" id="cancel-expense-btn" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-violet-600 hover:bg-violet-500 text-white">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/charts.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

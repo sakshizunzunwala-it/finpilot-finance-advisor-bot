@@ -1,0 +1,6 @@
+{
+  "name": "FinPilot – Personal Finance Advisor Bot",
+  "description": "AI-powered personal finance assistant with smart budgeting, expense tracking, savings insights, financial health score, and scenario-aware AI advisor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
