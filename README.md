@@ -16,20 +16,6 @@ https://finpilot-money-planner.ai.studio
 - Profiles for Salaried Professional, College Student, Freelancer and Household Manager
 
 
-## Screenshots
-
-### Dashboard
-![Dashboard] <img width="954" height="442" alt="Screenshot 2026-09-29 190808" src="https://github.com/user-attachments/assets/da6ac755-f9a4-4a59-83e0-01d0954ef4d4" />
-
-
-### AI Budget Plan
-![Budget] <img width="952" height="449" alt="Screenshot 2026-09-29 190826" src="https://github.com/user-attachments/assets/4865735f-2b20-48d7-830d-e840d8807527" />
-
-
-### AI Chat Advisor
-![Chat]<img width="954" height="441" alt="Screenshot 2026-09-29 190906" src="https://github.com/user-attachments/assets/61d2d00c-bdda-4324-8044-8f8745f85376" />
-
-
 ## Tech Stack
 - Backend: Python, Flask, SQLAlchemy, SQLite
 - AI: Google Gemini API
